@@ -130,4 +130,6 @@ public class RestTest{
         ProcessingReport result = MyJsonValidator.validateJson(body, "schemas/schema1.json");
         Assert.assertTrue(result.toString(),result.isSuccess());
     }
+
+    //comment for push to git
 }
