@@ -1,11 +1,16 @@
 package com.brainacad;
 
+import com.github.fge.jsonschema.core.report.ProcessingReport;
 import org.apache.http.HttpResponse;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Test;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static com.brainacad.JsonUtils.*;
 
 
 public class RestTest{
@@ -67,6 +72,62 @@ public class RestTest{
     }
 
     //TODO: напишите по тесткейсу на каждый вариант запроса на сайте https://reqres.in
-    //TODO: в тескейсах проверьте Result Code и несколько параметров из JSON ответа (если он есть)
+    //TODO: в тескейсах проверьте Result Code и несколько параметров из JSON ответа (если он есть
 
+   @Test//LIST USERS
+
+    public void listUsers() throws IOException {
+        String endpoint="/api/users";
+        HttpResponse response = HttpClientHelper.get(URL+endpoint,"page=2");
+       int statusCode = response.getStatusLine().getStatusCode();
+       Assert.assertEquals("Response status code should be 200", 200, statusCode);
+        String jsonPath = "$.data[*].first_name";
+        String body=HttpClientHelper.getBodyFromResponse(response);
+        List listUsers = listFromJSONByPath(body,jsonPath);
+        List expectedList = Arrays.asList("Eve", "Charles", "Tracey");
+        System.out.println(listUsers);
+        Assert.assertEquals("LIST USERS BAG", expectedList, listUsers);
+    }
+
+    @Test//single users
+
+    public void singleUsers() throws IOException {
+        String endpoint="/api/users/2";
+        HttpResponse response = HttpClientHelper.get(URL+endpoint, "" );
+        int statusCode = response.getStatusLine().getStatusCode();
+        Assert.assertEquals("Response status code should be 200", 200, statusCode);
+        String jsonPath = "$.data.id";
+        String body=HttpClientHelper.getBodyFromResponse(response);
+        int intUsers = intFromJSONByPath(body,jsonPath);
+        int expectedInt = 2;
+        System.out.println(intUsers);
+        Assert.assertEquals("single users bag", expectedInt, intUsers);
+    }
+
+    @Test//postCreated
+
+    public void postCreated() throws IOException {
+        String endpoint="/api/users";
+        HttpResponse response = HttpClientHelper.post(URL+endpoint,"{\"name\":\"alex\",\"job\":\"pm\"}" );
+        int statusCode = response.getStatusLine().getStatusCode();
+        Assert.assertEquals("Response status code should be 201", 201, statusCode);
+        String jsonPath = "$.createdAt";
+        String body=HttpClientHelper.getBodyFromResponse(response);
+        String createdAtUserId = stringFromJSONByPath(body,jsonPath);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZoneUTC();
+        DateTime dt = formatter.parseDateTime(stringFromJSONByPath(body,jsonPath));
+        System.out.println(createdAtUserId);
+        Assert.assertTrue("postCreated bag", dt.plusMinutes(-10).isBeforeNow());
+    }
+
+    @Test// json test
+    public void validateJsonTest() throws Exception {
+        String endpoint="/api/users";
+        HttpResponse response = HttpClientHelper.get(URL+endpoint, "page=2" );
+        int statusCode = response.getStatusLine().getStatusCode();
+        Assert.assertEquals("Response status code should be 200", 200, statusCode);
+        String body=HttpClientHelper.getBodyFromResponse(response);
+        ProcessingReport result = MyJsonValidator.validateJson(body, "schemas/schema1.json");
+        Assert.assertTrue(result.toString(),result.isSuccess());
+    }
 }

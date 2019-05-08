@@ -20,7 +20,7 @@ public class HttpClientHelper {
     public static HttpResponse get(String endpointUrl, String parameters) throws IOException {
         Map<String, String> headers=new HashMap<>();
         headers.put("User-Agent", "My-Test-User-Agent");
-       return get(endpointUrl, parameters, headers);
+        return get(endpointUrl, parameters, headers);
     }
 
     //REST GET запрос
