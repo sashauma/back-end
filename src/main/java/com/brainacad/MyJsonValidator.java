@@ -15,7 +15,7 @@ public class MyJsonValidator {
         ObjectMapper mapper = new ObjectMapper();
         String jsonSchema = new String(Files.readAllBytes(Paths.get(jsonSchemaPath)));
         JsonNode schemaNode = mapper.readTree(jsonSchema);
-        JsonNode currJson =mapper.readTree(json);
+        JsonNode currJson = mapper.readTree(json);
         JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
         JsonSchema schema = factory.getJsonSchema(schemaNode);
         return schema.validate(currJson);

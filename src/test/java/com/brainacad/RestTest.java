@@ -15,6 +15,8 @@ import static com.brainacad.JsonUtils.*;
 
 public class RestTest{
 
+    /*
+
     private static final String URL="https://reqres.in/";
 
     @Test//GET метод
@@ -32,10 +34,7 @@ public class RestTest{
     @Test//GET метод
     public void checkGetResponseBodyNotNull() throws IOException {
         String endpoint="/api/users";
-
         HttpResponse response = HttpClientHelper.get(URL+endpoint,"page=2");
-
-        //Конвертируем входящий поток тела ответа в строку
         String body=HttpClientHelper.getBodyFromResponse(response);
         System.out.println(body);
         Assert.assertNotEquals("Body shouldn't be null", null, body);
@@ -131,5 +130,5 @@ public class RestTest{
         Assert.assertTrue(result.toString(),result.isSuccess());
     }
 
-    //comment for push to git
+     */
 }
