@@ -10,6 +10,14 @@ Feature: test
     When i send GET request on endpoind "/api/users" and parametrs "page=2"
     Then i get response - shouldn't be "null"
 
+  Scenario: zapchasti.ria.com, get method - Response status code 200
+    Given i have server by url "https://zapchasti.ria.com/"
+    Then I get response status code 200
+
+  Scenario: itliga.com.ua, get method - Response status code 200
+    Given i have server by url "http://itliga.com.ua/"
+    Then I get response status code 200
+
 #  Scenario: post method - Response status code should be 201
 #    Given i have server by url "https://reqres.in"
 #    When i send post request on endpoind "/api/users" and requestBody "{\"name\": \"morpheus\",\"job\": \"leader\"}"
